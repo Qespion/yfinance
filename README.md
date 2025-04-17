@@ -80,7 +80,7 @@ uvicorn app.main:app --reload
 
 Once the API is running, you can access the Swagger documentation at:
 
-- http://localhost:8000/ (local development)
+- http://localhost:3000/ (local development)
 - https://your-coolify-domain/ (Coolify deployment)
 
 ## License
