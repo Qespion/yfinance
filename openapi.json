@@ -1,0 +1,451 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "YFinance API",
+        "description": "API for Yahoo Finance data using yfinance library",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/ticker/{symbol}": {
+            "get": {
+                "summary": "Get Ticker Info",
+                "description": "Get basic information about a ticker.",
+                "operationId": "get_ticker_info",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Symbol",
+                            "type": "string"
+                        },
+                        "name": "symbol",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TickerResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ticker/{symbol}/fast_info": {
+            "get": {
+                "summary": "Get Ticker Fast Info",
+                "description": "Get basic information about a ticker using the faster API.",
+                "operationId": "get_ticker_fast_info",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Symbol",
+                            "type": "string"
+                        },
+                        "name": "symbol",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TickerResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ticker/{symbol}/history": {
+            "get": {
+                "summary": "Get Ticker History",
+                "description": "Get historical market data for a ticker.",
+                "operationId": "get_ticker_history",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Symbol",
+                            "type": "string"
+                        },
+                        "name": "symbol",
+                        "in": "path"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Period",
+                            "default": "1mo",
+                            "type": "string"
+                        },
+                        "name": "period",
+                        "in": "query",
+                        "description": "Data period (1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max)"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Interval",
+                            "default": "1d",
+                            "type": "string"
+                        },
+                        "name": "interval",
+                        "in": "query",
+                        "description": "Data interval (1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo)"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Start",
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "name": "start",
+                        "in": "query",
+                        "description": "Start date in YYYY-MM-DD format"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "End",
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "name": "end",
+                        "in": "query",
+                        "description": "End date in YYYY-MM-DD format"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Prepost",
+                            "default": false,
+                            "type": "boolean"
+                        },
+                        "name": "prepost",
+                        "in": "query",
+                        "description": "Include Pre and Post market data"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Auto Adjust",
+                            "default": true,
+                            "type": "boolean"
+                        },
+                        "name": "auto_adjust",
+                        "in": "query",
+                        "description": "Adjust all OHLC automatically"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TickerResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/market/summary": {
+            "get": {
+                "summary": "Get Market Summary",
+                "description": "Get market summary data.",
+                "operationId": "get_market_summary",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Lang",
+                            "default": "en",
+                            "type": "string"
+                        },
+                        "name": "lang",
+                        "in": "query",
+                        "description": "Language for the market summary"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Region",
+                            "default": "US",
+                            "type": "string"
+                        },
+                        "name": "region",
+                        "in": "query",
+                        "description": "Region for the market summary"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MarketResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/screener/equity": {
+            "post": {
+                "summary": "Screen Equity",
+                "description": "Screen for equities based on specified parameters.",
+                "operationId": "screen_equity",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EquityScreenerParams"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScreenerResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/search": {
+            "get": {
+                "summary": "Search Tickers",
+                "description": "Search for securities by name or ticker symbol.",
+                "operationId": "search_tickers",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Query",
+                            "type": "string"
+                        },
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Limit",
+                            "default": 10,
+                            "type": "integer"
+                        },
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "TickerResponse": {
+                "title": "TickerResponse",
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "title": "Success",
+                        "default": true,
+                        "type": "boolean"
+                    },
+                    "data": {
+                        "title": "Data",
+                        "default": {},
+                        "type": "object"
+                    },
+                    "error": {
+                        "title": "Error",
+                        "type": "string"
+                    }
+                }
+            },
+            "MarketResponse": {
+                "title": "MarketResponse",
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "title": "Success",
+                        "default": true,
+                        "type": "boolean"
+                    },
+                    "data": {
+                        "title": "Data",
+                        "default": {},
+                        "type": "object"
+                    },
+                    "error": {
+                        "title": "Error",
+                        "type": "string"
+                    }
+                }
+            },
+            "ScreenerResponse": {
+                "title": "ScreenerResponse",
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "title": "Success",
+                        "default": true,
+                        "type": "boolean"
+                    },
+                    "data": {
+                        "title": "Data",
+                        "default": {},
+                        "type": "object"
+                    },
+                    "count": {
+                        "title": "Count",
+                        "default": 0,
+                        "type": "integer"
+                    },
+                    "error": {
+                        "title": "Error",
+                        "type": "string"
+                    }
+                }
+            },
+            "SearchResponse": {
+                "title": "SearchResponse",
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "title": "Success",
+                        "default": true,
+                        "type": "boolean"
+                    },
+                    "data": {
+                        "title": "Data",
+                        "default": [],
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    },
+                    "count": {
+                        "title": "Count",
+                        "default": 0,
+                        "type": "integer"
+                    },
+                    "error": {
+                        "title": "Error",
+                        "type": "string"
+                    }
+                }
+            },
+            "HistoryParams": {
+                "title": "HistoryParams",
+                "type": "object",
+                "properties": {
+                    "period": {
+                        "title": "Period",
+                        "default": "1mo",
+                        "type": "string",
+                        "description": "Data period (1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max)"
+                    },
+                    "interval": {
+                        "title": "Interval",
+                        "default": "1d",
+                        "type": "string",
+                        "description": "Data interval (1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo)"
+                    }
+                }
+            },
+            "EquityScreenerParams": {
+                "title": "EquityScreenerParams",
+                "type": "object",
+                "properties": {
+                    "market_cap_min": {
+                        "title": "Market Cap Min",
+                        "type": "number",
+                        "description": "Minimum market cap"
+                    },
+                    "market_cap_max": {
+                        "title": "Market Cap Max",
+                        "type": "number",
+                        "description": "Maximum market cap"
+                    },
+                    "dividend_yield_min": {
+                        "title": "Dividend Yield Min",
+                        "type": "number",
+                        "description": "Minimum dividend yield"
+                    },
+                    "dividend_yield_max": {
+                        "title": "Dividend Yield Max",
+                        "type": "number",
+                        "description": "Maximum dividend yield"
+                    },
+                    "sector": {
+                        "title": "Sector",
+                        "type": "string",
+                        "description": "Sector filter"
+                    },
+                    "industry": {
+                        "title": "Industry",
+                        "type": "string",
+                        "description": "Industry filter"
+                    },
+                    "country": {
+                        "title": "Country",
+                        "type": "string",
+                        "description": "Country filter"
+                    },
+                    "exchange": {
+                        "title": "Exchange",
+                        "type": "string",
+                        "description": "Exchange filter"
+                    },
+                    "limit": {
+                        "title": "Limit",
+                        "default": 25,
+                        "type": "integer",
+                        "description": "Number of results to return"
+                    },
+                    "offset": {
+                        "title": "Offset",
+                        "default": 0,
+                        "type": "integer",
+                        "description": "Offset for pagination"
+                    }
+                }
+            }
+        }
+    }
+}
